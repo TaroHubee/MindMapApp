@@ -1,7 +1,11 @@
 import Database from 'better-sqlite3';
+import path from 'path';
 import { config } from '../config/env';
 
-const DB_PATH = config.DB_PATH;
+// 絶対パスならそのまま、相対パスならprocess.cwd()から解決
+const DB_PATH = path.isAbsolute(config.DB_PATH)
+    ? config.DB_PATH
+    : path.resolve(process.cwd(), config.DB_PATH);
 
 export function initDatabase() {
     const db = new Database(DB_PATH);
