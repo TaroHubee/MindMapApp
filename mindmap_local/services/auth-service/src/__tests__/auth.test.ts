@@ -1,16 +1,13 @@
 import request from 'supertest';
-import express from 'express';
 import jwt from 'jsonwebtoken';
-import authRoutes from '../routes/auth';
+import ms from 'ms';
+import { createApp } from '../app';
 import { initDatabase, getDb } from '../db/init';
 import { config } from '../config/env';
 
-// テスト用のExpressアプリケーションを作成
-const app = express();
-app.use(express.json());
-app.use('/auth', authRoutes);
-
 describe('Auth API', () => {
+  const app = createApp();
+
   beforeAll(() => {
     // テスト用データベースを初期化
     initDatabase();
@@ -196,9 +193,11 @@ describe('Auth API', () => {
       expect(decoded).toHaveProperty('iat'); // issued at
       expect(decoded).toHaveProperty('exp'); // expiration
       
-      // 有効期限が設定時間（1時間 = 3600秒）になっているか確認
-      const expiresInSeconds = decoded.exp - decoded.iat;
-      expect(expiresInSeconds).toBe(3600); // 1h = 3600 seconds
+      // 有効期限が設定時間になっているか確認（config.JWT_EXPIRES_INから動的に計算）
+      const expectedExpiryMs = ms(config.JWT_EXPIRES_IN);
+      const expectedExpirySeconds = Math.floor(expectedExpiryMs / 1000);
+      const actualExpirySeconds = decoded.exp - decoded.iat;
+      expect(actualExpirySeconds).toBe(expectedExpirySeconds);
     });
   });
 });

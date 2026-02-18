@@ -1,30 +1,14 @@
 import request from 'supertest';
-import express from 'express';
-import cors from 'cors';
+import { createApp } from '../app';
 import { initDatabase } from '../db/init';
 import pkg from '../../package.json';
 
-// テスト用のExpressアプリケーションを作成（index.tsと同じ構成）
-const app = express();
-app.use(cors());
-app.use(express.json());
-
 describe('Server Health Check', () => {
+  const app = createApp();
+
   beforeAll(() => {
     // データベース初期化
     initDatabase();
-    
-    // ヘルスチェックエンドポイント（index.tsと同じ）
-    app.get('/health', (req, res) => {
-      res.status(200).json({
-        status: 'ok',
-        service: 'auth-service',
-        version: pkg.version,
-        uptime: process.uptime(),
-        timestamp: new Date().toISOString(),
-        env: process.env.NODE_ENV || 'development'
-      });
-    });
   });
 
   describe('GET /health', () => {
