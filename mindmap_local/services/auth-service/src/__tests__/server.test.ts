@@ -1,4 +1,5 @@
 import request from 'supertest';
+<<<<<<< HEAD
 import { createApp } from '../app';
 import { initDatabase } from '../db/init';
 import pkg from '../../package.json';
@@ -9,6 +10,34 @@ describe('Server Health Check', () => {
   beforeAll(() => {
     // データベース初期化
     initDatabase();
+=======
+import express from 'express';
+import cors from 'cors';
+import { initDatabase } from '../db/init';
+import pkg from '../../package.json';
+
+// テスト用のExpressアプリケーションを作成（index.tsと同じ構成）
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+describe('Server Health Check', () => {
+  beforeAll(() => {
+    // データベース初期化
+    initDatabase();
+    
+    // ヘルスチェックエンドポイント（index.tsと同じ）
+    app.get('/health', (req, res) => {
+      res.status(200).json({
+        status: 'ok',
+        service: 'auth-service',
+        version: pkg.version,
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+        env: process.env.NODE_ENV || 'development'
+      });
+    });
+>>>>>>> 4962c58 (feat(auth-service): add authentication routes and tests)
   });
 
   describe('GET /health', () => {
