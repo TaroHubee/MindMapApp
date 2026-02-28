@@ -1,6 +1,4 @@
-import request from 'supertest';
-<<<<<<< HEAD
-<<<<<<< HEAD
+﻿import request from 'supertest';
 import { createApp } from '../app';
 import { initDatabase } from '../db/init';
 import pkg from '../../package.json';
@@ -9,39 +7,7 @@ describe('Server Health Check', () => {
   const app = createApp();
 
   beforeAll(() => {
-    // データベース初期化
     initDatabase();
-=======
-import express from 'express';
-import cors from 'cors';
-=======
-import { createApp } from '../app';
->>>>>>> 7a37944 (fix: refactor app structure and improve test setup[#6])
-import { initDatabase } from '../db/init';
-import pkg from '../../package.json';
-
-describe('Server Health Check', () => {
-  const app = createApp();
-
-  beforeAll(() => {
-    // データベース初期化
-    initDatabase();
-<<<<<<< HEAD
-    
-    // ヘルスチェックエンドポイント（index.tsと同じ）
-    app.get('/health', (req, res) => {
-      res.status(200).json({
-        status: 'ok',
-        service: 'auth-service',
-        version: pkg.version,
-        uptime: process.uptime(),
-        timestamp: new Date().toISOString(),
-        env: process.env.NODE_ENV || 'development'
-      });
-    });
->>>>>>> 4962c58 (feat(auth-service): add authentication routes and tests)
-=======
->>>>>>> 7a37944 (fix: refactor app structure and improve test setup[#6])
   });
 
   describe('GET /health', () => {
