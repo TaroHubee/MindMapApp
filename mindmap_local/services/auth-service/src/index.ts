@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { config } from './config/env';
 import { initDatabase, closeDb } from './db/init';
 import { createApp } from './app';
@@ -7,11 +8,14 @@ import pkg from '../package.json';
 =======
 import express from 'express';
 import cors from 'cors';
+=======
+>>>>>>> 7a37944 (fix: refactor app structure and improve test setup[#6])
 import { config } from './config/env';
 import { initDatabase, closeDb } from './db/init';
-import authRoutes from './routes/auth';
+import { createApp } from './app';
 import pkg from '../package.json';
 
+<<<<<<< HEAD
 const app = express();
 
 app.use(cors());
@@ -31,6 +35,8 @@ app.get('/health', (_req, res) => {
 });
 
 >>>>>>> 4962c58 (feat(auth-service): add authentication routes and tests)
+=======
+>>>>>>> 7a37944 (fix: refactor app structure and improve test setup[#6])
 try {
 	initDatabase();
 	console.log('[startup] Database initialized');
@@ -40,10 +46,15 @@ try {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 const app = createApp();
 
 =======
 >>>>>>> 4962c58 (feat(auth-service): add authentication routes and tests)
+=======
+const app = createApp();
+
+>>>>>>> 7a37944 (fix: refactor app structure and improve test setup[#6])
 const server = app.listen(config.PORT, () => {
 	console.log('[startup] Auth service started');
 	console.log(`[startup] Environment: ${config.NODE_ENV}`);
