@@ -1,4 +1,4 @@
-import request from 'supertest';
+﻿import request from 'supertest';
 import { createApp } from '../app';
 import { initDatabase } from '../db/init';
 import pkg from '../../package.json';
@@ -7,7 +7,6 @@ describe('Server Health Check', () => {
   const app = createApp();
 
   beforeAll(() => {
-    // データベース初期化
     initDatabase();
   });
 

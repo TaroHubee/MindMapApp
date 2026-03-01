@@ -1,4 +1,4 @@
-import request from 'supertest';
+﻿import request from 'supertest';
 import jwt from 'jsonwebtoken';
 import ms from 'ms';
 import { createApp } from '../app';
@@ -9,12 +9,10 @@ describe('Auth API', () => {
   const app = createApp();
 
   beforeAll(() => {
-    // テスト用データベースを初期化
     initDatabase();
   });
 
   beforeEach(() => {
-    // 各テスト前にusersテーブルをクリア
     const db = getDb();
     db.prepare('DELETE FROM users').run();
   });
@@ -37,7 +35,6 @@ describe('Auth API', () => {
     });
 
     it('should return 409 error when email already exists', async () => {
-      // 最初のユーザーを登録
       await request(app)
         .post('/auth/register')
         .send({
@@ -46,7 +43,6 @@ describe('Auth API', () => {
           displayName: 'Test User'
         });
 
-      // 同じメールアドレスで再度登録を試みる
       const response = await request(app)
         .post('/auth/register')
         .send({
@@ -61,7 +57,6 @@ describe('Auth API', () => {
     });
 
     it('should validate required fields', async () => {
-      // emailなし
       let response = await request(app)
         .post('/auth/register')
         .send({
@@ -72,7 +67,6 @@ describe('Auth API', () => {
       expect(response.status).toBe(400);
       expect(response.body.error).toBe('Missing required fields');
 
-      // passwordなし
       response = await request(app)
         .post('/auth/register')
         .send({
@@ -83,7 +77,6 @@ describe('Auth API', () => {
       expect(response.status).toBe(400);
       expect(response.body.error).toBe('Missing required fields');
 
-      // displayNameなし
       response = await request(app)
         .post('/auth/register')
         .send({
@@ -98,7 +91,6 @@ describe('Auth API', () => {
 
   describe('POST /auth/login', () => {
     beforeEach(async () => {
-      // 各ログインテスト前にテストユーザーを作成
       await request(app)
         .post('/auth/register')
         .send({
@@ -149,7 +141,6 @@ describe('Auth API', () => {
     });
 
     it('should validate required fields', async () => {
-      // emailなし
       let response = await request(app)
         .post('/auth/login')
         .send({
@@ -159,7 +150,6 @@ describe('Auth API', () => {
       expect(response.status).toBe(400);
       expect(response.body.error).toBe('Missing required fields');
 
-      // passwordなし
       response = await request(app)
         .post('/auth/login')
         .send({
@@ -181,19 +171,14 @@ describe('Auth API', () => {
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('token');
 
-      // JWTトークンをデコード
       const decoded = jwt.verify(response.body.token, config.JWT_SECRET) as any;
 
-      // ペイロードに必要なフィールドが含まれているか確認
       expect(decoded).toHaveProperty('userId');
       expect(decoded).toHaveProperty('email');
       expect(decoded.email).toBe('test@example.com');
-      
-      // トークンに有効期限が設定されているか確認
-      expect(decoded).toHaveProperty('iat'); // issued at
-      expect(decoded).toHaveProperty('exp'); // expiration
-      
-      // 有効期限が設定時間になっているか確認（config.JWT_EXPIRES_INから動的に計算）
+      expect(decoded).toHaveProperty('iat');
+      expect(decoded).toHaveProperty('exp');
+
       const expectedExpiryMs = ms(config.JWT_EXPIRES_IN);
       const expectedExpirySeconds = Math.floor(expectedExpiryMs / 1000);
       const actualExpirySeconds = decoded.exp - decoded.iat;
