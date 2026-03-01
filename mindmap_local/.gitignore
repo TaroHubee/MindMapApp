@@ -1,0 +1,14 @@
+node_modules
+
+# Vite
+.vite
+dist
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+
+# Environment files
+.env
+.env.local
