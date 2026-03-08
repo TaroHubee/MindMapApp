@@ -35,6 +35,8 @@ export const config = {
 
     FRONTEND_URL: getEnvVar('FRONTEND_URL', 'http://localhost:5173'),
 
+    API_GATEWAY_URL: getEnvVar('API_GATEWAY_URL', 'http://localhost:3000'),
+
     SERVICE_NAME: 'api-gateway',
     VERSION: version,
 } as const;
